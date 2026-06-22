@@ -55,6 +55,81 @@ body {
   justify-content: center;
 }
 
+.cowart-prompt-guide {
+  position: relative;
+  display: inline-flex;
+}
+
+.tlui-button__tool.cowart-prompt-guide-button {
+  display: inline-flex;
+  width: auto;
+  min-width: 62px;
+  padding: 0 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.tlui-main-toolbar__overflow-content .cowart-prompt-guide {
+  display: none;
+}
+
+.cowart-prompt-guide-panel {
+  position: absolute;
+  right: 0;
+  bottom: 46px;
+  z-index: 10000;
+  width: min(520px, calc(100vw - 32px));
+  max-height: min(520px, calc(100vh - 120px));
+  overflow: auto;
+  padding: 12px;
+  color: #111827;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.22);
+}
+
+.cowart-prompt-guide-title {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cowart-prompt-guide-list {
+  display: grid;
+  gap: 6px;
+}
+
+.cowart-prompt-guide-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  color: inherit;
+  text-align: left;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cowart-prompt-guide-row:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+
+.cowart-prompt-guide-row span {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.cowart-prompt-guide-row b {
+  color: #2563eb;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
 .tlui-button__tool.cowart-annotation-toolbar-button::after {
   inset: 4px;
 }

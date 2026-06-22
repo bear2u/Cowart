@@ -55,9 +55,22 @@ const AI_IMAGE_HOLDER_DEFAULT_W = 320
 const AI_IMAGE_HOLDER_DEFAULT_H = 220
 const ANNOTATION_TOOL_ID = 'cowart-annotation'
 const ANNOTATION_TOOL_LABEL = '标注'
+const PROMPT_GUIDE_LABEL = '가이드'
 const ANNOTATION_DEFAULT_COLOR = 'red'
 const ANNOTATION_MIN_LENGTH = 8
 const ANNOTATION_BEND_RATIO = 0.12
+const PROMPT_GUIDES = [
+  '이 Cowart 주석 스크린샷 기준으로 원본 옆에 수정본 만들어줘.',
+  '선택한 AI image holder에 유튜브 썸네일용 16:9 이미지를 생성해서 넣어줘.',
+  '선택한 AI image holder에 세로 숏폼용 9:16 이미지를 생성해서 넣어줘.',
+  '이 주석에서 표시한 텍스트만 바꾸고, 나머지 디자인은 최대한 그대로 유지해줘.',
+  '이 주석에서 화살표로 가리킨 영역을 제거한 깨끗한 수정본을 원본 옆에 만들어줘.',
+  '이 이미지의 스타일을 유지하면서 제목만 더 강한 유튜브 뉴스 썸네일 느낌으로 바꿔줘.',
+  '원본 옆에 A/B 비교용 수정본을 만들어줘. 원본은 삭제하거나 이동하지 마.',
+  '선택한 이미지를 참고해서 같은 톤의 새 카드 이미지를 하나 더 만들어줘.',
+  '이 캔버스의 선택된 이미지를 기준으로 텍스트 가독성을 높인 버전을 만들어줘.',
+  '주석 내용대로 수정하되, 주석 선과 메모는 결과 이미지에 포함하지 말아줘.'
+]
 const ANNOTATION_MIN_BEND = 16
 const ANNOTATION_MAX_BEND = 48
 const ANNOTATION_LABEL_POSITION = 0
@@ -552,6 +565,54 @@ function CowartAnnotationToolbarItem() {
   )
 }
 
+function CowartPromptGuideButton() {
+  const [open, setOpen] = useState(false)
+  const [copiedIndex, setCopiedIndex] = useState(null)
+
+  const copyPrompt = async (prompt, index) => {
+    await navigator.clipboard?.writeText(prompt)
+    setCopiedIndex(index)
+    setTimeout(() => setCopiedIndex(null), 1200)
+  }
+
+  return (
+    <div className="cowart-prompt-guide">
+      <button
+        aria-expanded={open ? 'true' : 'false'}
+        aria-label="Cowart 프롬프트 가이드"
+        className="tlui-button tlui-button__tool cowart-prompt-guide-button"
+        draggable={false}
+        onClick={() => setOpen((value) => !value)}
+        title="Cowart 프롬프트 가이드"
+        type="button"
+      >
+        <span className="cowart-annotation-toolbar-label" draggable={false}>
+          {PROMPT_GUIDE_LABEL}
+        </span>
+      </button>
+      {open ? (
+        <div className="cowart-prompt-guide-panel" role="dialog" aria-label="Cowart 프롬프트 예시">
+          <div className="cowart-prompt-guide-title">프롬프트 예시</div>
+          <div className="cowart-prompt-guide-list">
+            {PROMPT_GUIDES.map((prompt, index) => (
+              <button
+                className="cowart-prompt-guide-row"
+                key={prompt}
+                onClick={() => copyPrompt(prompt, index)}
+                title="클릭해서 복사"
+                type="button"
+              >
+                <span>{prompt}</span>
+                <b>{copiedIndex === index ? '복사됨' : '복사'}</b>
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 function CowartToolbarDivider() {
   return <div aria-orientation="vertical" className="cowart-toolbar-divider" role="separator" />
 }
@@ -560,6 +621,7 @@ function CowartToolbar(props) {
   return (
     <DefaultToolbar {...props} maxItems={9}>
       <CowartAnnotationToolbarItem />
+      <CowartPromptGuideButton />
       <CowartToolbarDivider />
       <SelectToolbarItem />
       <HandToolbarItem />
