@@ -56,17 +56,25 @@ body {
 }
 
 .cowart-prompt-guide {
-  position: relative;
+  position: fixed;
+  top: 48px;
+  left: 8px;
+  z-index: 10000;
   display: inline-flex;
 }
 
 .tlui-button__tool.cowart-prompt-guide-button {
   display: inline-flex;
+  height: 36px;
   width: auto;
   min-width: 62px;
   padding: 0 12px;
   align-items: center;
   justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
 }
 
 .tlui-main-toolbar__overflow-content .cowart-prompt-guide {
@@ -75,8 +83,8 @@ body {
 
 .cowart-prompt-guide-panel {
   position: absolute;
-  right: 0;
-  bottom: 46px;
+  top: 44px;
+  left: 0;
   z-index: 10000;
   width: min(520px, calc(100vw - 32px));
   max-height: min(520px, calc(100vh - 120px));

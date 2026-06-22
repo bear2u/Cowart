@@ -621,7 +621,6 @@ function CowartToolbar(props) {
   return (
     <DefaultToolbar {...props} maxItems={9}>
       <CowartAnnotationToolbarItem />
-      <CowartPromptGuideButton />
       <CowartToolbarDivider />
       <SelectToolbarItem />
       <HandToolbarItem />
@@ -1074,6 +1073,7 @@ export default function App() {
 
   return (
     <main className="cowart-canvas" aria-label="Cowart infinite canvas">
+      <CowartPromptGuideButton />
       <Tldraw
         snapshot={snapshot ?? undefined}
         inferDarkMode
