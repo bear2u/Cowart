@@ -19,7 +19,7 @@ Cowart is a local infinite-canvas plugin for Codex. It brings a tldraw-powered c
 Send the following message to Codex:
 
 ```text
-Please install the Cowart Codex plugin from https://github.com/zhongerxin/cowart.git.
+Please install the Cowart Codex plugin from git@github.com:bear2u/Cowart.git.
 Clone the repository into ~/plugins/cowart, verify that .codex-plugin/plugin.json exists,
 add the plugin to the personal marketplace, run codex plugin marketplace add ~,
 then run codex plugin add cowart@personal.
@@ -32,7 +32,7 @@ Clone the plugin into the default location referenced by the Codex personal mark
 
 ```bash
 mkdir -p ~/plugins
-git clone https://github.com/zhongerxin/cowart.git ~/plugins/cowart
+git clone git@github.com:bear2u/Cowart.git ~/plugins/cowart
 cd ~/plugins/cowart
 npm install
 npm run build

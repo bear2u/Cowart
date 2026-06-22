@@ -1,44 +1,43 @@
 # Cowart
 
-Cowart 是一个面向 Codex 的本地无限画布插件。它基于 tldraw 提供可视化画布，用于构思、标注、生成图片和根据标注图迭代图片。画布运行在本地网页服务中，数据默认保存到当前用户项目的 `canvas/` 目录，而不是保存到插件仓库里。
+Cowart는 Codex에서 쓰는 로컬 무한 캔버스 플러그인입니다. tldraw 기반 캔버스를 열어 이미지 기획, 주석, AI 이미지 생성, 주석 기반 수정 작업을 한 화면에서 처리합니다.
 
-English README: [README.en.md](README.en.md)
+캔버스 데이터는 플러그인 저장소가 아니라 현재 작업 중인 프로젝트의 `canvas/` 폴더에 저장됩니다.
 
-## 功能
+영문 README: [README.en.md](README.en.md)
 
-- 在 Codex 中打开一个本地 tldraw 无限画布。
-- 在当前项目目录中持久化画布页面和图片资源。
-- 在画布中创建 AI image holder，并让 Codex 生成图片填入选中的 holder。
-- 上传或提供 Cowart 标注截图，让 Codex 根据标注生成干净的新图并放到原图旁边。
-- 通过 Cowart MCP 工具读取选择状态、插入图片，并保存到页面本地资源目录。
+## 주요 기능
 
-## 安装
+- Codex에서 로컬 tldraw 캔버스 열기
+- 프로젝트별 캔버스 페이지와 이미지 asset 저장
+- AI image holder를 선택해 이미지 생성 결과 삽입
+- Cowart 주석 스크린샷을 기준으로 수정본 생성
+- 원본과 수정본을 캔버스에 나란히 배치
+- MCP 도구로 선택 상태 읽기, 이미지 삽입, 캔버스 저장
 
-### 让 Codex 自动安装
+## 설치
 
-把下面这段发给 Codex：
+### Codex로 설치
+
+Codex에 아래처럼 요청하면 됩니다.
 
 ```text
-请从 https://github.com/zhongerxin/cowart.git 安装 Cowart Codex 插件。
-请 clone 仓库到 ~/plugins/cowart，确认 .codex-plugin/plugin.json 存在，
-把插件加入 personal marketplace，先运行 codex plugin marketplace add ~，
-再运行 codex plugin add cowart@personal。
-安装后请校验插件，并告诉我是否需要开启一个新对话来加载新技能和 MCP 工具。
+git@github.com:bear2u/Cowart.git 에서 Cowart Codex 플러그인을 설치해줘.
+~/plugins/cowart 에 clone 하고, npm install / npm run build 후
+personal marketplace에 등록해서 cowart@personal 로 설치해줘.
 ```
 
-### 手动安装
-
-推荐把插件 clone 到 Codex personal marketplace 默认会引用的位置：
+### 수동 설치
 
 ```bash
 mkdir -p ~/plugins
-git clone https://github.com/zhongerxin/cowart.git ~/plugins/cowart
+git clone git@github.com:bear2u/Cowart.git ~/plugins/cowart
 cd ~/plugins/cowart
 npm install
 npm run build
 ```
 
-确保 `~/.agents/plugins/marketplace.json` 中有 Cowart 条目：
+`~/.agents/plugins/marketplace.json`에 Cowart 항목이 없다면 추가합니다.
 
 ```json
 {
@@ -63,75 +62,75 @@ npm run build
 }
 ```
 
-然后先注册 personal marketplace，再安装插件：
+등록 후 설치합니다.
 
 ```bash
 codex plugin marketplace add ~
 codex plugin add cowart@personal
 ```
 
-安装后建议开启一个新的 Codex 对话，让新的 skill 和 MCP 工具完整加载。
+설치 후 새 Codex 대화를 열면 Cowart skill과 MCP 도구가 로드됩니다.
 
-## 使用
+## 사용법
 
-### 打开画布
+### 캔버스 열기
 
-在 Codex 中说：
+Codex에 이렇게 말합니다.
 
 ```text
 Open the Cowart canvas for this project.
 ```
 
-Cowart 会启动本地服务，默认地址是：
+기본 주소:
 
 ```text
 http://127.0.0.1:43217/
 ```
 
-画布数据会保存在当前项目目录下：
+프로젝트에는 아래 파일들이 생성됩니다.
 
 ```text
 canvas/pages/<page-id>/cowart-canvas.json
 canvas/pages/<page-id>/assets/
 ```
 
-![在 Codex 中打开 Cowart 画布](assets/open-canvas.png)
+![Cowart 캔버스 열기](assets/open-canvas.png)
 
-### 生成新图
+### 이미지 생성
 
-1. 打开 Cowart 画布。
-2. 在画布里创建并选中一个 AI image holder。
-3. 在 Codex 中描述要生成的图片，例如：
+1. Cowart 캔버스를 엽니다.
+2. 캔버스에서 AI image holder를 만들고 선택합니다.
+3. Codex에 생성할 이미지를 설명합니다.
 
 ```text
 Generate a new image into the selected Cowart AI image holder.
 ```
 
-Codex 会读取选中的 holder，按它的比例生成图片，并插入到 holder 中。
+Codex가 선택된 holder 비율에 맞춰 이미지를 생성하고 캔버스에 넣습니다.
 
-![使用 Cowart 生成并插入新图](assets/generate-image.png)
+![Cowart 이미지 생성](assets/generate-image.png)
 
-### 根据标注图生成新图
+### 주석 기준 수정본 만들기
 
-1. 在 Cowart 画布中对图片做标注。
-2. 截图并把标注截图发给 Codex。
-3. 使用提示：
+1. Cowart 캔버스에서 원본 이미지 위에 주석을 답니다.
+2. 주석이 보이는 화면을 캡처해서 Codex에 첨부합니다.
+3. Codex에 이렇게 요청합니다.
 
 ```text
 Use my Cowart annotation screenshot to generate a clean revised image beside the original.
 ```
 
-Codex 会读取截图里的标注和箭头，生成去掉标注痕迹的新图，并把结果放在原图旁边。原图和标注不会被删除或移动。
+Codex는 주석과 화살표를 해석해 수정본을 만들고, 원본 옆에 배치합니다. 원본과 주석은 삭제하지 않습니다.
 
-![根据 Cowart 标注截图生成修订图](assets/annotation-edit.png)
+![Cowart 주석 기반 수정](assets/annotation-edit.png)
 
-## 技能
+## Skill
 
-- `cowart:cowart-open-canvas`：打开 Cowart 本地画布。
-- `cowart:cowart-image-gen`：把生成图片插入选中的 AI image holder。
-- `cowart:cowart-image-edit`：根据用户提供的 Cowart 标注截图生成修订图。
+- `cowart:cowart-open-canvas`: 현재 프로젝트의 Cowart 캔버스 열기
+- `cowart:cowart-image-gen`: 선택된 AI image holder에 생성 이미지 삽입
+- `cowart:cowart-image-edit`: 주석 스크린샷 기준으로 수정 이미지 생성
 
-## 本地开发
+## 개발
 
 ```bash
 npm install
@@ -139,24 +138,22 @@ npm run dev
 npm run build
 ```
 
-也可以直接启动画布服务，并指定用户项目目录：
+프로젝트를 지정해 캔버스 서버를 직접 실행할 수도 있습니다.
 
 ```bash
-./scripts/start-canvas.sh /path/to/user/project
+./scripts/start-canvas.sh /path/to/project
 ```
 
-常用环境变量：
+환경 변수:
 
-- `COWART_PORT`：本地服务端口，默认 `43217`。
-- `COWART_PROJECT_DIR`：画布数据所属的用户项目目录。
-- `COWART_CANVAS_DIR`：画布数据目录，默认是 `$COWART_PROJECT_DIR/canvas`。
+- `COWART_PORT`: 로컬 캔버스 포트, 기본값 `43217`
+- `COWART_PROJECT_DIR`: 캔버스를 저장할 프로젝트 경로
+- `COWART_CANVAS_DIR`: 캔버스 데이터 경로, 기본값 `$COWART_PROJECT_DIR/canvas`
 
-## 开发者
+## 저장소
 
-ZHONG XIN  
-zhongxin123456@gmail.com  
-https://www.jiqiren.ai
+GitHub: [bear2u/Cowart](https://github.com/bear2u/Cowart)
 
-## 致谢
+## 감사
 
-Cowart 的画布能力基于 [tldraw/tldraw](https://github.com/tldraw/tldraw) 实现。
+Cowart의 캔버스 기능은 [tldraw](https://github.com/tldraw/tldraw)를 기반으로 합니다.
